@@ -42,22 +42,26 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
+      if (typeof document === "undefined") return;
       const currentScrollY = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min(currentScrollY / maxScroll, 1);
-      
+
       setScrollProgress(progress);
-      
+
       // Smooth blur transition based on scroll
-      const newBlurStrength = Math.min(10 + (progress * 15), 25);
+      const newBlurStrength = Math.min(10 + progress * 15, 25);
       setBlurStrength(newBlurStrength);
 
       // Visibility control with smoother threshold
       if (currentScrollY < 10) {
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollY + 5) { // Reduced threshold
+      } else if (currentScrollY > lastScrollY + 5) {
+        // Reduced threshold
         setIsVisible(false);
-      } else if (currentScrollY < lastScrollY - 5) { // Reduced threshold
+      } else if (currentScrollY < lastScrollY - 5) {
+        // Reduced threshold
         setIsVisible(true);
       }
       setLastScrollY(currentScrollY);
@@ -115,9 +119,9 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
                 animate={{
                   opacity: 1,
                   height: "auto",
-                  transition: { 
+                  transition: {
                     duration: 0.4,
-                    ease: [0.32, 0.72, 0, 1]
+                    ease: [0.32, 0.72, 0, 1],
                   },
                 }}
                 exit={{
@@ -138,7 +142,9 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
             )}
           </AnimatePresence>
 
-          <div className={`flex items-center gap-3 ${isMobile ? "ml-auto" : ""}`}>
+          <div
+            className={`flex items-center gap-3 ${isMobile ? "ml-auto" : ""}`}
+          >
             <AnimatedButton
               onClick={downloadResume}
               className="bg-blue-500/80 hover:bg-blue-500 transition-colors duration-300"
@@ -228,7 +234,9 @@ const NavItem: React.FC<NavItem & { isMobile: boolean }> = ({
       }}
     >
       {icon && (
-        <span className="text-white/60 group-hover:text-white/80 transition-colors duration-300">{icon}</span>
+        <span className="text-white/60 group-hover:text-white/80 transition-colors duration-300">
+          {icon}
+        </span>
       )}
       <span className="text-sm font-medium whitespace-nowrap">{name}</span>
       {isMobile && <ChevronRight size={16} className="ml-auto text-white/60" />}
